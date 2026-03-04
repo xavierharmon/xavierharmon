@@ -1,9 +1,11 @@
-export const STORAGE_KEY = "road_trip_memories_v1";
+export const STORAGE_KEY     = "road_trip_memories_v1";
+export const ROUTE_CACHE_KEY = "road_trip_routes_v1";
 
 export const VIEWS = {
-  LIST: "list",
-  EDIT: "edit",
-  MAP:  "map",
+  LIST:    "list",
+  EDIT:    "edit",
+  MAP:     "map",
+  HISTORY: "history",
 };
 
 export const STOP_COLORS = {
@@ -14,9 +16,9 @@ export const STOP_COLORS = {
 
 export const MAP_DEFAULTS = {
   CENTER: { lat: 39.5, lng: -98.35 },
-  ZOOM: 4,
+  ZOOM:   4,
 };
 
-export const MAX_PHOTOS_PREVIEW = 5;
-export const MAX_IMAGE_SIZE_MB  = 1;
+export const MAX_PHOTOS_PREVIEW  = 5;
+export const MAX_IMAGE_SIZE_MB   = 1;
 export const MAX_IMAGE_DIMENSION = 1200;

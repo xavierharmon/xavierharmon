@@ -1,11 +1,13 @@
+// src/App.jsx
 import { useState } from "react";
 import { VIEWS } from "@/constants";
-import TripListPage from "@/pages/TripListPage";
+import TripListPage   from "@/pages/TripListPage";
 import TripEditorPage from "@/pages/TripEditorPage";
-import MapPage from "@/pages/MapPage";
+import MapPage        from "@/pages/MapPage";
+import HistoryMapPage from "@/pages/HistoryMapPage";
 
 export default function App() {
-  const [view, setView] = useState(VIEWS.LIST);
+  const [view,         setView]         = useState(VIEWS.LIST);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
   function openEditor(trip = null) {
@@ -43,11 +45,18 @@ export default function App() {
     );
   }
 
+  if (view === VIEWS.HISTORY) {
+    return (
+      <HistoryMapPage onBack={goToList} />
+    );
+  }
+
   return (
     <TripListPage
       onNewTrip={() => openEditor(null)}
       onEditTrip={openEditor}
       onViewMap={openMap}
+      onViewHistory={() => setView(VIEWS.HISTORY)}
     />
   );
 }

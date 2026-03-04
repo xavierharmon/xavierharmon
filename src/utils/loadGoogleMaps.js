@@ -1,3 +1,4 @@
+// src/utils/loadGoogleMaps.js
 let loaded  = false;
 let loading = false;
 let pending = [];
@@ -10,9 +11,10 @@ export function loadGoogleMaps(apiKey) {
     if (loading) return;
 
     loading = true;
-
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+
+    // Added geometry to libraries — needed to decode polylines
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
     script.async = true;
     script.defer = true;
 
@@ -24,7 +26,7 @@ export function loadGoogleMaps(apiKey) {
 
     script.onerror = () => {
       loading = false;
-      const err = new Error("Failed to load Google Maps. Check your API key.");
+      const err = new Error("Failed to load Google Maps.");
       pending.forEach(p => p.reject(err));
       pending = [];
     };
