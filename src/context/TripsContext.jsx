@@ -1,3 +1,4 @@
+// src/context/TripsContext.jsx
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { loadTrips, saveTrips } from "@/utils/storage";
 import { generateId } from "@/utils/imageHelpers";
@@ -5,13 +6,16 @@ import { generateId } from "@/utils/imageHelpers";
 const TripsContext = createContext(null);
 
 export function TripsProvider({ children }) {
-  const [trips, setTrips]   = useState([]);
+  const [trips,   setTrips]   = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState(null);
+  const [error,   setError]   = useState(null);
 
+  // Load from storage once on mount
   useEffect(() => {
     try {
-      setTrips(loadTrips());
+      const saved = loadTrips();
+      console.log("Loaded trips from storage:", saved);
+      setTrips(saved);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -19,29 +23,46 @@ export function TripsProvider({ children }) {
     }
   }, []);
 
-  const persist = useCallback((updated) => {
-    try {
+  const addTrip = useCallback((tripData) => {
+    const trip = { ...tripData, id: tripData.id || generateId() };
+    console.log("addTrip called with:", trip);
+    setTrips(prev => {
+      const updated = [...prev, trip];
       saveTrips(updated);
-      setTrips(updated);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    }
+      return updated;
+    });
+    return trip;
   }, []);
 
-  const addTrip = useCallback((tripData) => {
-    const trip = { ...tripData, id: generateId() };
-    persist([...trips, trip]);
-    return trip;
-  }, [trips, persist]);
-
   const updateTrip = useCallback((updatedTrip) => {
-    persist(trips.map(t => t.id === updatedTrip.id ? updatedTrip : t));
-  }, [trips, persist]);
+    console.log("updateTrip called with:", updatedTrip);
+    if (!updatedTrip.id) {
+      console.error("updateTrip called without an id — aborting");
+      return;
+    }
+    setTrips(prev => {
+      const exists = prev.find(t => t.id === updatedTrip.id);
+      if (!exists) {
+        console.error("Trip not found in state:", updatedTrip.id);
+        return prev;
+      }
+      const updated = prev.map(t =>
+        t.id === updatedTrip.id ? { ...t, ...updatedTrip } : t
+      );
+      saveTrips(updated);
+      console.log("Trips after update:", updated);
+      return updated;
+    });
+  }, []);
 
   const deleteTrip = useCallback((id) => {
-    persist(trips.filter(t => t.id !== id));
-  }, [trips, persist]);
+    console.log("deleteTrip called with id:", id);
+    setTrips(prev => {
+      const updated = prev.filter(t => t.id !== id);
+      saveTrips(updated);
+      return updated;
+    });
+  }, []);
 
   const createBlankTrip = useCallback(() => ({
     id:          null,

@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { VIEWS } from "@/constants";
+import TripListPage from "@/pages/TripListPage";
+import TripEditorPage from "@/pages/TripEditorPage";
+import MapPage from "@/pages/MapPage";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [view, setView] = useState(VIEWS.LIST);
+  const [selectedTrip, setSelectedTrip] = useState(null);
+
+  function openEditor(trip = null) {
+    setSelectedTrip(trip);
+    setView(VIEWS.EDIT);
+  }
+
+  function openMap(trip) {
+    setSelectedTrip(trip);
+    setView(VIEWS.MAP);
+  }
+
+  function goToList() {
+    setSelectedTrip(null);
+    setView(VIEWS.LIST);
+  }
+
+  if (view === VIEWS.EDIT) {
+    return (
+      <TripEditorPage
+        trip={selectedTrip}
+        onBack={goToList}
+        onViewMap={openMap}
+      />
+    );
+  }
+
+  if (view === VIEWS.MAP) {
+    return (
+      <MapPage
+        trip={selectedTrip}
+        onBack={goToList}
+        onEdit={() => openEditor(selectedTrip)}
+      />
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <TripListPage
+      onNewTrip={() => openEditor(null)}
+      onEditTrip={openEditor}
+      onViewMap={openMap}
+    />
+  );
 }
-
-export default App

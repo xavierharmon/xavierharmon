@@ -5,7 +5,7 @@ import PhotoGrid from "@/components/common/PhotoGrid";
 import Button from "@/components/common/Button";
 import { generateId } from "@/utils/imageHelpers";
 
-export default function TripEditor({ form, errors, onChange, onAddStop }) {
+export default function TripEditor({ form, errors, onChange }) {
   function set(field, value) {
     onChange({ ...form, [field]: value });
   }
@@ -30,6 +30,9 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
     set("stops", form.stops.filter(s => s.id !== id));
   }
 
+  // Guard — if form is undefined don't render anything
+  if (!form) return null;
+
   return (
     <div className={styles.editor}>
 
@@ -44,7 +47,7 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
         {errors?.name && <p className={styles.errorText}>{errors.name}</p>}
       </div>
 
-      {/* Date & Description */}
+      {/* Date and Description */}
       <section className={styles.section}>
         <div className={styles.field}>
           <label className={styles.label}>Date</label>
@@ -55,7 +58,6 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
             onChange={e => set("date", e.target.value)}
           />
         </div>
-
         <div className={styles.field}>
           <label className={styles.label}>Description / Notes</label>
           <textarea
@@ -68,7 +70,7 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
         </div>
       </section>
 
-      {/* Trip-level Photos */}
+      {/* Trip Photos */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Trip Photos</h3>
         <PhotoGrid
@@ -94,8 +96,8 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
           </div>
         </div>
 
-        {/* Connector line segment */}
-        {form.stops?.length > 0 && (
+        {/* Stops */}
+        {(form.stops || []).length > 0 && (
           <div className={styles.connectorGroup}>
             {form.stops.map((stop, i) => (
               <div key={stop.id} className={styles.stopRow}>
@@ -117,7 +119,7 @@ export default function TripEditor({ form, errors, onChange, onAddStop }) {
           </div>
         )}
 
-        {/* Add Stop button */}
+        {/* Add Stop Button */}
         <div className={styles.addStopRow}>
           <span className={styles.connectorLineShort} />
           <button className={styles.addStopBtn} onClick={addStop}>
