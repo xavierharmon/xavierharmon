@@ -64,7 +64,7 @@ export default function MapPage({ trip, onBack, onEdit }) {
         title:    stop.name,
         icon: {
           path:         window.google.maps.SymbolPath.CIRCLE,
-          scale:        12,
+          scale:        9,
           fillColor:    color,
           fillOpacity:  1,
           strokeColor:  "#ffffff",

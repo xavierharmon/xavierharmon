@@ -168,7 +168,7 @@ export default function HistoryMapPage({ onBack }) {
             title:    `${trip.name} — ${stop.name}`,
             icon: {
               path:         window.google.maps.SymbolPath.CIRCLE,
-              scale:        isOrigin || isDest ? 9 : 7,
+              scale:        isOrigin || isDest ? 5 : 4,
               fillColor:    pinColor,
               fillOpacity:  1,
               strokeColor:  "#ffffff",
