@@ -1,3 +1,6 @@
+## Travel Map History and Timelines
+This project is a test of using Claude to code out an app using React. With no prior experience I am attempting to build out an application and eventually host it on a screen as digital art in my house. 
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
