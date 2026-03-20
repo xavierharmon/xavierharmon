@@ -4,5 +4,3 @@
 ## I Enjoy sharing what I know with others and learning from those with more experince than myself. <br>
 
 > ## I have experince with Python, SQL, R, Tableau, and AWS Cloud Resources. <br> <br>
-
-## test2
